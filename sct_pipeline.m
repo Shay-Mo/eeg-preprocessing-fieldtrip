@@ -25,7 +25,7 @@ resultsDIR = fullfile(baseDIR, 'FT_Results');
 
 
 %% Loop through subjects and process data one at a time 
-subjects = [1 2 3]; % Subjects you want to preprocess — edit as needed
+subjects = [1]; % Subjects you want to preprocess — edit as needed
 
 for subject = subjects
     
@@ -58,7 +58,7 @@ for subject = subjects
         % Save preprocessed 
         preprocessed = sct_preprocess(eegData, subjectDIR);
         
-        % Interpolate missing/bad channels (pre-ICA) - Recreate CPz channel
+        % Recreate CPz channel (pre-ICA)
         interpolated = sct_interpolate(preprocessed, layoutFilename, 'pre-ICA');
            
         % Define trials - Segment the data into trials
@@ -78,7 +78,7 @@ for subject = subjects
         % Reject artifactual ICs
         icaCleanTrials = sct_rejectArtifacts(components, cleanTrials, subjectDIR);
 
-        % Interpolate missing/bad channels (post-ICA) - Recreate CPz channel
+        % Recreate CPz channel (post-ICA)
         icaCleanTrials = sct_interpolate(icaCleanTrials, layoutFilename, 'post-ICA');
 
         % Plot the trials

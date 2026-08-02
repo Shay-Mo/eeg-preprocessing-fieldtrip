@@ -1,5 +1,5 @@
 function eegData = sct_loadRawData(filename)
-% SCT_LOADRAWDATA loads raw EEG data for the Simon Conflict Task
+%SCT_LOADRAWDATA loads raw EEG data for the Simon Conflict Task
 %
 %   eegData = SCT_LOADRAWDATA(filename) loads raw EEG data using
 %   FieldTrip from the specified file, excluding EOG channels.
