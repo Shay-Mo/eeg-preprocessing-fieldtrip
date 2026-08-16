@@ -26,6 +26,16 @@ function components = sct_runICA(cleanTrials, subjectDIR)
 
     %% Concatenate the segmented data back together 
     fprintf('\n\t--> Concatenating trials into continuous data...\n');
+
+    % NOTE: keep continuous = 'yes'. ft_componentanalysis internally
+    % concatenates all trials for training anyway, including any overlapping
+    % samples between adjacent trials (our epoch windows can overlap). 
+    % Feeding overlapping samples straight into ft_componentanalysis would 
+    % duplicate those samples in the training data and bias the ICA 
+    % decomposition. This step instead concatenates trials back onto their 
+    % original continuous timeline first, so overlapping trials are merged
+    % into fewer, larger trials with no duplicated samples (trial count may
+    % drop as a result - that's expected, not data loss).
     cfg = [];
     cfg.continuous = 'yes';
     cntData = ft_redefinetrial(cfg, cleanTrials);
