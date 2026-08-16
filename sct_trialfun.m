@@ -104,7 +104,8 @@ function [trl, event] = sct_trialfun(cfg)
             end
 
             % Feedback is the next two events after the stimulus event
-            if i+2 <= numel(event)
+            % There is no feedback in the testing phase
+            if trialType == 1 && i+2 <= numel(event)
                 fbCode = event(i+2).value;
             end
 
