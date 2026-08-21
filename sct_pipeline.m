@@ -63,11 +63,11 @@ for subject = subjects
            
         % Define trials - Segment the data into trials
         trials = sct_defineTrials(interpolated);      
-    
+
         % Inspect the data for bad trials automatically - Reject bad trials
         % Save cleanTrials
         cleanTrials  = sct_autoInspectTrials(trials, subjectDIR);
-         
+
         % Run ICA
         % Save components
         components = sct_runICA(cleanTrials, subjectDIR);
@@ -75,7 +75,7 @@ for subject = subjects
         % Plot components to detect artifactual ones
         components = sct_inspectICA(components, layoutFilename);
 
-        % Reject artifactual ICs
+        % % Reject artifactual ICs
         icaCleanTrials = sct_rejectArtifacts(components, cleanTrials, subjectDIR);
 
         % Recreate CPz channel (post-ICA)
