@@ -6,6 +6,19 @@ function interpolated = sct_interpolate(preprocessed, layoutFilename, flag)
 %   channel during recording, which therefore contains no signal — using
 %   spatial interpolation from neighbouring electrodes.
 %
+%   This function is called twice in the pipeline (see sct_pipeline):
+%     1. Pre-ICA: CPz is recreated so a complete 64-channel montage is
+%        available for trial definition and inspection. CPz itself is
+%        then excluded from the ICA decomposition (sct_runICA), since an
+%        interpolated channel is a linear combination of other channels
+%        and would violate ICA's full-rank requirement. If CPz's
+%        neighbouring channels contain artifacts at this stage, the
+%        interpolated CPz value inherits that contamination.
+%     2. Post-ICA: after artifactual components are removed from the
+%        neighbouring channels (sct_rejectArtifacts), CPz is recreated a
+%        second time from those now-cleaned neighbours, so the final CPz
+%        signal doesn't carry forward pre-ICA artifact contamination.
+%
 %   Input:
 %       preprocessed   - FieldTrip data structure
 %       layoutFilename - (string) full path to the electrode positions file
