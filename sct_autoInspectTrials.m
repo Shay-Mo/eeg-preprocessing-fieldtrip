@@ -8,8 +8,7 @@ function cleanTrials = sct_autoInspectTrials(trials, subjectDIR)
 %   median peak-to-peak amplitude exceeds a fixed absolute threshold, or
 %   if either its median peak-to-peak amplitude or standard deviation is
 %   a z-score outlier relative to the other trials from the same
-%   subject. The list of rejected trial indices is saved to a text file,
-%   and the cleaned data is saved to a .mat file.
+%   subject. The list of rejected trial indices is saved to a text file.
 %
 %   Input:
 %       trials     - FieldTrip data structure (raw, filtered, in
@@ -28,7 +27,7 @@ function cleanTrials = sct_autoInspectTrials(trials, subjectDIR)
 %   Example:
 %       cleanTrials = sct_autoInspectTrials(trials, subjectDIR);
 %
-%   See also SCT_DEFINETRIALS, SCT_PIPELINE, FT_REJECTARTIFACT
+%   See also SCT_DEFINETRIALS, SCT_PIPELINE, FT_REJECTARTIFACT, SCT_SAVERESULT
 
     %% Rejection thresholds
     % peak2peakLimit chosen empirically for this dataset: raw filtered
@@ -99,9 +98,5 @@ function cleanTrials = sct_autoInspectTrials(trials, subjectDIR)
     fclose(fid);
     fprintf('\t--> Saved bad trial list to %s\n', filename);
 
-    % Save the cleaned signal as a .mat
-    filename = fullfile(subjectDIR, [subjectID '_cleanTrials.mat']);
-    save(filename, 'cleanTrials');
-    fprintf('\t--> Saved cleaned trials to %s\n', filename);
 
 end

@@ -3,8 +3,7 @@ function icaCleanTrials = sct_rejectArtifacts(components, cleanTrials, subjectDI
 %   Re-derives the ICA component time courses from the cleaned trial data
 %   using the previously computed unmixing matrix, then projects the data
 %   back to sensor space with the artifactual components excluded. Also
-%   logs the rejected component indices to a text file, and saves the
-%   cleaned trials to a .mat file in subjectDIR.
+%   logs the rejected component indices to a text file.
 %
 %   Input:
 %       components  - struct output from ICA decomposition (e.g. from
@@ -28,7 +27,7 @@ function icaCleanTrials = sct_rejectArtifacts(components, cleanTrials, subjectDI
 %   Example:
 %       icaCleanTrials = sct_rejectArtifacts(components, cleanTrials, subjectDIR);
 %
-%   See also: SCT_RUNICA, SCT_INSPECTICA, FT_COMPONENTANALYSIS, FT_REJECTCOMPONENT
+%   See also: SCT_RUNICA, SCT_INSPECTICA, SCT_SAVERESULT, FT_REJECTCOMPONENT
 
     % Reconstruct ICA component time courses from the cleaned trial data
     % using the previously computed unmixing matrix
@@ -48,7 +47,7 @@ function icaCleanTrials = sct_rejectArtifacts(components, cleanTrials, subjectDI
     % Store rejected component indices, alongside the cleaned data
     icaCleanTrials.artifacts = components.artComps;
 
-     [~, subjectID] = fileparts(subjectDIR);
+    [~, subjectID] = fileparts(subjectDIR);
 
     % Save rejected artifactual component indices to a log file
     componentLogFile = fullfile(subjectDIR, [subjectID '_artifactualComponents.txt']);
@@ -58,9 +57,5 @@ function icaCleanTrials = sct_rejectArtifacts(components, cleanTrials, subjectDI
     fclose(fid);
     fprintf('\n\t--> Saved artifactual components list to: %s\n', componentLogFile);
 
-    % Save the ICA-cleaned trial data as a .mat
-    cleanDataFile = fullfile(subjectDIR, [subjectID '_icaCleanTrials.mat']);
-    save(cleanDataFile, 'icaCleanTrials');
-    fprintf('\n\t--> Saved ICA-cleaned trials to: %s\n', cleanDataFile);
 
 end

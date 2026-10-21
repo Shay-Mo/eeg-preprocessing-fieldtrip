@@ -1,18 +1,14 @@
-function components = sct_runICA(cleanTrials, subjectDIR)
+function components = sct_runICA(cleanTrials)
 %SCT_RUNICA Performs ICA decomposition on EEG data
 %
-%   components = SCT_RUNICA(cleanTrials, subjectDIR) concatenates the
-%   cleaned trials back into continuous data and runs Infomax ICA
-%   (via FieldTrip's 'runica' method), excluding interpolated channels
-%   (e.g. CPz) from the decomposition. Component labels (ic001, ic002,
-%   ...) are added, and the resulting components are saved to a .mat
-%   file.
+%   components = SCT_RUNICA(cleanTrials) concatenates the cleaned trials 
+%   back into continuous data and runs Infomax ICA (via FieldTrip's 
+%   'runica' method), excluding interpolated channels (e.g. CPz) from the 
+%   decomposition. Component labels (ic001, ic002, ...) are added.
 %
 %   Input:
 %       cleanTrials - FieldTrip data structure, as returned by
 %                    sct_autoInspectTrials
-%       subjectDIR  - (string) full path to the subject's results
-%                    directory, where the ICA components are saved
 %
 %   Output:
 %       components - FieldTrip component data structure, with channel
@@ -20,9 +16,9 @@ function components = sct_runICA(cleanTrials, subjectDIR)
 %                    ...)
 %
 %   Example:
-%       components = sct_runICA(cleanTrials, subjectDIR);
+%       components = sct_runICA(cleanTrials);
 %
-%   See also SCT_AUTOINSPECTTRIALS, SCT_INSPECTICA, SCT_REJECTARTIFACTS
+%   See also SCT_INSPECTICA, SCT_REJECTARTIFACTS, SCT_SAVERESULT
 
     %% Concatenate the segmented data back together 
     fprintf('\n\t--> Concatenating trials into continuous data...\n');
@@ -65,10 +61,5 @@ function components = sct_runICA(cleanTrials, subjectDIR)
     components.label = arrayfun(@(x) sprintf('ic%03d', x), 1:nComp, ...
         'UniformOutput', false)';
 
-    %% Save the components as a .mat 
-    [~, subjectID] = fileparts(subjectDIR);
-    filename = fullfile(subjectDIR, [subjectID '_components.mat']);
-    save(filename, 'components');
-    fprintf('\t--> Saved ICA components to %s\n', filename);
 
 end

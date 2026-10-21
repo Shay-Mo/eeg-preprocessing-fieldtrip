@@ -1,24 +1,22 @@
-function preprocessed = sct_preprocess(eegData, subjectDIR)
+function preprocessed = sct_preprocess(eegData)
 %SCT_PREPROCESS Removes line noise and applies bandpass filtering
 %
-%   preprocessed = SCT_PREPROCESS(eegData, subjectDIR) removes line noise 
-%   from eegData using Zapline-Plus, then applies a high-pass filter at 
-%   0.5 Hz and a low-pass filter at 60 Hz using FieldTrip.
+%   preprocessed = SCT_PREPROCESS(eegData) removes line noise from eegData 
+%   using Zapline-Plus, then applies a high-pass filter at 0.5 Hz and a 
+%   low-pass filter at 60 Hz using FieldTrip.
 %
 %   Input:
 %       eegData  - FieldTrip raw data structure (single trial), as
 %                  returned by sct_loadRawData
-%       subjectDIR - (string) full path to the subject's results
-%                    directory, where the preprocessed data is saved
 %
 %   Output:
 %       preprocessed - FieldTrip data structure containing the
 %                      line-noise-removed, filtered signal
 %
 %   Example:
-%       preprocessed = sct_preprocess(eegData, '/data/sub-001');
+%       preprocessed = sct_preprocess(eegData);
 %
-%   See also SCT_LOADRAWDATA, SCT_PIPELINE, SCT_INTERPOLATE
+%   See also SCT_LOADRAWDATA, SCT_PIPELINE, SCT_INTERPOLATE, SCT_SAVERESULT
 
     %% Filter settings
     hpFreq = 0.5;   % Hz, high-pass cutoff
@@ -48,11 +46,5 @@ function preprocessed = sct_preprocess(eegData, subjectDIR)
     % Preserve dataset name  (lost during filtering)
     preprocessed.cfg.dataset = eegData.cfg.dataset;
     
-
-    %% Save the filtered signal as a .mat 
-    [~, subjectID] = fileparts(subjectDIR);
-    filename = fullfile(subjectDIR, [subjectID '_preprocessed.mat']);
-    save(filename, 'preprocessed');
-    fprintf('\n\t--> Saved preprocessed data to %s\n', filename);
 
 end

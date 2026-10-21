@@ -1,18 +1,18 @@
-function erp = sct_computeERP(binnedTrials, subjectDIR)
+function erp = sct_computeERP(binnedTrials)
 %SCT_COMPUTEERP Computes baseline-corrected ERPs for each trial bin
-%   Applies baseline correction to the binned trial data, then computes
-%   the trial-averaged event-related potential (ERP) separately for each
-%   bin defined by sct_defineBins (trialinfo column 5). Unbinned trials
-%   (bin code 0) are excluded. The result is saved as a struct so 
-%   downstream analyses (e.g. PCA/LFADS) don't have to assume bin order 
-%   or separately track channel labels and the time axis.
+% 
+%   erp = sct_computeERP(binnedTrials) applies baseline correction to the 
+%   binned trial data, then computes the trial-averaged event-related 
+%   potential (ERP) separately for each bin defined by sct_defineBins 
+%   (trialinfo column 5). Unbinned trials (bin code 0) are excluded. 
+%   The result is returned as a struct so downstream analyses 
+%   (e.g. PCA/LFADS) don't have to assume bin order or separately track 
+%   channel labels and the time axis.
 %
 %   Input:
 %       binnedTrials - FieldTrip data struct with a trialinfo matrix
 %                      whose 5th column holds the bin code for each trial
 %                      (see sct_defineBins)
-%       subjectDIR   - path to the subject's output directory, used to
-%                      derive the subject ID and save the output file
 %
 %   Output:
 %       erp - struct with fields:
@@ -26,9 +26,9 @@ function erp = sct_computeERP(binnedTrials, subjectDIR)
 %                      congruency x feedback code scheme)
 %
 %   Example:
-%       erp = sct_computeERP(binnedTrials, subjectDIR);
+%       erp = sct_computeERP(binnedTrials);
 %
-%   See also SCT_DEFINEBINS, FT_PREPROCESSING, FT_TIMELOCKANALYSIS
+%   See also SCT_DEFINEBINS, FT_PREPROCESSING, FT_TIMELOCKANALYSIS, SCT_SAVERESULT
 
     % Bin code column in trialinfo (see sct_defineBins)
     colBin = 5;
@@ -68,10 +68,5 @@ function erp = sct_computeERP(binnedTrials, subjectDIR)
     erp.time = baseline.time{1};
     erp.bins = bins;
 
-    %% Save the ERP
-    [~, subjectID] = fileparts(subjectDIR);
-    erpFile = fullfile(subjectDIR, [subjectID '_erp.mat']);
-    save(erpFile, 'erp');
-    fprintf('\n\t--> Saved ERP to: %s\n', erpFile);
 
 end

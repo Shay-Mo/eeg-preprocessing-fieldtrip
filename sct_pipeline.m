@@ -25,7 +25,7 @@ resultsDIR = fullfile(baseDIR, 'FT_Results');
 
 
 %% Loop through subjects and process data one at a time 
-subjects = [1]; % Subjects you want to preprocess — edit as needed
+subjects = 1; % Subjects you want to preprocess — edit as needed
 
 for subject = subjects
     
@@ -56,7 +56,8 @@ for subject = subjects
         
         % Remove line noise - Apply high/low-pass filters
         % Save preprocessed 
-        preprocessed = sct_preprocess(eegData, subjectDIR);
+        preprocessed = sct_preprocess(eegData);
+        sct_saveResult(preprocessed, subjectDIR, 'preprocessed');
         
         % Recreate CPz channel (pre-ICA)
         interpolated = sct_interpolate(preprocessed, layoutFilename, 'pre-ICA');
@@ -67,19 +68,23 @@ for subject = subjects
         % Inspect the data for bad trials automatically - Reject bad trials
         % Save cleanTrials
         cleanTrials  = sct_autoInspectTrials(trials, subjectDIR);
+        sct_saveResult(cleanTrials, subjectDIR, 'cleanTrials');
 
         % Run ICA
-        % Save components
-        components = sct_runICA(cleanTrials, subjectDIR);
+        % Save ICA components
+        components = sct_runICA(cleanTrials);
+        sct_saveResult(components, subjectDIR, 'components');
 
         % Plot components to detect artifactual ones
         components = sct_inspectICA(components, layoutFilename);
 
-        % % Reject artifactual ICs
+        % Reject artifactual ICs
         icaCleanTrials = sct_rejectArtifacts(components, cleanTrials, subjectDIR);
 
         % Recreate CPz channel (post-ICA)
+        % Save icaCleanTrials
         icaCleanTrials = sct_interpolate(icaCleanTrials, layoutFilename, 'post-ICA');
+        sct_saveResult(icaCleanTrials, subjectDIR, 'icaCleanTrials');
 
         % Plot the trials
         sct_plotTrials(cleanTrials, 'Before ICA');
@@ -89,7 +94,9 @@ for subject = subjects
         binnedTrials = sct_defineBins(icaCleanTrials);
 
         % Compute ERPs - Apply baseline correction
-        erp = sct_computeERP(binnedTrials, subjectDIR);
+        % Save erp
+        erp = sct_computeERP(binnedTrials);
+        sct_saveResult(erp, subjectDIR, 'erp');
         
         fprintf('\n\n\t********************    End of Processing Subject: %s    ********************\n\n', subjectStr);
 
