@@ -37,7 +37,7 @@ The pipeline uses MATLAB and the following external toolboxes:
 - **[Zapline-Plus](https://github.com/MariusKlug/Zapline-plus)** — Line-noise
   removal. The current configuration references version `zapline-plus-1.2.1`.
 - An ICA artifact-detection toolbox adapted from [ADJUST](https://doi.org/10.1111/j.1469-8986.2010.01061.x)
-  (Mognon et al., 2011), [auto-ica-checking](https://www.nitrc.org/docman/?group_id=739&selected_doc_group_id=4756) used in `sct_autoInspectICA`
+  (Mognon et al., 2011), [auto-ica-checking](https://www.nitrc.org/docman/?group_id=739&selected_doc_group_id=4756), used in `sct_autoInspectICA`
 
 ## Processing Workflow
 
